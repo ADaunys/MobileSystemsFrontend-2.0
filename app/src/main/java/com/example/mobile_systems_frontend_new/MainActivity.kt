@@ -3,6 +3,7 @@ package com.example.mobile_systems_frontend_new
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobile_systems_frontend_new.repository.Repository
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.getPost()
         viewModel.myResponse.observe(this, Observer{ response ->
             Log.d("Response", response.toString())
+            var helloTextView: TextView = findViewById(R.id.text_id)
+            helloTextView.setText(response.toString())
         })
     }
 }
