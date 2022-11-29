@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.myResponse.observe(this, Observer{ response ->
             Log.d("Response", response.toString())
             var helloTextView: TextView = findViewById(R.id.text_id)
-            helloTextView.setText(response.map)
+            helloTextView.setText(response.toString())
         })
     }
 }
