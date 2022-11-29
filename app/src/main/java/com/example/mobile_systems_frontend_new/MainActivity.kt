@@ -19,11 +19,22 @@ class MainActivity : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        /*
         viewModel.getPost()
         viewModel.myResponse.observe(this, Observer{ response ->
             Log.d("Response", response.toString())
             var helloTextView: TextView = findViewById(R.id.text_id)
-            helloTextView.setText(response.map)
+            helloTextView.setText(response.toString())
+        })*/
+        viewModel.calculateLocation()
+        viewModel.calculationResponse.observe(this, Observer{ response ->
+            Log.d("Response", response.toString())
+            var helloTextView: TextView = findViewById(R.id.text_id)
+            var finalMessage = ""
+            for(item in response.responses) {
+                finalMessage += item + "\n"
+            }
+            helloTextView.setText(finalMessage)
         })
     }
 }
