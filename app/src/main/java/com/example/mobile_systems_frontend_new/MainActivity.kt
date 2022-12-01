@@ -11,6 +11,9 @@ import com.example.mobile_systems_frontend_new.model.Strengths
 import com.example.mobile_systems_frontend_new.model.Users
 import com.example.mobile_systems_frontend_new.repository.Repository
 import android.text.method.ScrollingMovementMethod
+import android.widget.ViewFlipper
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,59 +27,57 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
-        val button = findViewById<TextView>(R.id.button)
-        button.setOnClickListener {
-            val macAddress = findViewById<TextView>(R.id.macAdressText).text.toString()
-            val strengthOne = findViewById<TextView>(R.id.strengthOneText).text.toString()
-            val strengthTwo = findViewById<TextView>(R.id.strengthTwoText).text.toString()
-            val strengthThree = findViewById<TextView>(R.id.strengthThreeText).text.toString()
-            try {
-                val postUserData = PostUserData(users = arrayOf(
-                    Users(macAddress, arrayOf(
-                        Strengths("wiliboxas1", strengthOne.toInt()),
-                        Strengths("wiliboxas2", strengthTwo.toInt()),
-                        Strengths("wiliboxas3", strengthThree.toInt())
-                    )
-                    )))
-                viewModel.calculateLocation(postUserData)
-                viewModel.calculationResponse.observe(this, Observer{ response ->
-                    var helloTextView: TextView = findViewById(R.id.text_id)
-                    var finalMessage = ""
-                    for(item in response.responses) {
-                        finalMessage += item + "\n"
-                    }
-                    helloTextView.setText(finalMessage)
-                })
-            } catch(e: Exception) {
-                val postUserData = PostUserData()
-                viewModel.calculateLocation(postUserData)
-                viewModel.calculationResponse.observe(this, Observer{ response ->
-                    var helloTextView: TextView = findViewById(R.id.text_id)
-                    var finalMessage = ""
-                    for(item in response.responses) {
-                        finalMessage += item + "\n"
-                    }
-                    helloTextView.setText(finalMessage)
-                })
+        val tabLayout: TabLayout = findViewById(R.id.tabLayout)
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val viewFlipper: ViewFlipper = findViewById(R.id.vf)
+                viewFlipper.displayedChild = tab.position
             }
-        }
-        // PIRMASIS REQUEST
-        /*
-        viewModel.getPost()
-        viewModel.myResponse.observe(this, Observer{ response ->
-            Log.d("Response", response.toString())
-            var helloTextView: TextView = findViewById(R.id.text_id)
-            helloTextView.setText(response.toString())
-        })*/
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+
+
     }
 
-    fun gotoHome(view: View){
-        setContentView(R.layout.activity_main)
+    fun getCoords(view: View){
+        val macAddress = findViewById<TextView>(R.id.macAdressText).text.toString()
+        val strengthOne = findViewById<TextView>(R.id.strengthOneText).text.toString()
+        val strengthTwo = findViewById<TextView>(R.id.strengthTwoText).text.toString()
+        val strengthThree = findViewById<TextView>(R.id.strengthThreeText).text.toString()
+        try {
+            val postUserData = PostUserData(users = arrayOf(
+                Users(macAddress, arrayOf(
+                    Strengths("wiliboxas1", strengthOne.toInt()),
+                    Strengths("wiliboxas2", strengthTwo.toInt()),
+                    Strengths("wiliboxas3", strengthThree.toInt())
+                ))))
+
+            viewModel.calculateLocation(postUserData)
+            viewModel.calculationResponse.observe(this, Observer{ response ->
+                var helloTextView: TextView = findViewById(R.id.text_id)
+                var finalMessage = ""
+                for(item in response.responses) {
+                    finalMessage += item + "\n"
+                }
+                helloTextView.text = finalMessage
+            })
+        } catch(e: Exception) {
+            val postUserData = PostUserData()
+            viewModel.calculateLocation(postUserData)
+            viewModel.calculationResponse.observe(this, Observer{ response ->
+                var helloTextView: TextView = findViewById(R.id.text_id)
+                var finalMessage = ""
+                for(item in response.responses) {
+                    finalMessage += item + "\n"
+                }
+                helloTextView.text = finalMessage
+            })
+        }
     }
 
     fun gotoMap(view: View){
-        setContentView(R.layout.map_view)
-
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
@@ -90,15 +91,5 @@ class MainActivity : AppCompatActivity() {
             mapText.text = map
             mapText.movementMethod = ScrollingMovementMethod()
         })
-    }
-
-    fun gotoSignals(view: View){
-        setContentView(R.layout.signal_strength_view)
-    }
-
-    fun onClick(view: View) {
-        setContentView(R.layout.map_view)
-
-
     }
 }
