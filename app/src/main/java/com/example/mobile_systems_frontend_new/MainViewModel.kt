@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobile_systems_frontend_new.model.CalculationResponse
 import com.example.mobile_systems_frontend_new.model.Post
 import com.example.mobile_systems_frontend_new.model.Map
+import com.example.mobile_systems_frontend_new.model.PostUserData
 import com.example.mobile_systems_frontend_new.repository.Repository
 import kotlinx.coroutines.launch
 
@@ -18,9 +19,9 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             myResponse.value = response
         }
     }
-    fun calculateLocation() {
+    fun calculateLocation(postUserData: PostUserData) {
         viewModelScope.launch {
-            val response = repository.calculateLocation()
+            val response = repository.calculateLocation(postUserData)
             calculationResponse.value = response
         }
     }

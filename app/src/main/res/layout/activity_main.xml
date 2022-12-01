@@ -56,6 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textExplain">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/macAdressText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -74,6 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/macAddressInput">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/strengthOneText"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -92,6 +94,7 @@
         app:layout_constraintTop_toBottomOf="@+id/strengthOneInput">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/strengthTwoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -110,6 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/strengthTwoInput">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/strengthThreeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
