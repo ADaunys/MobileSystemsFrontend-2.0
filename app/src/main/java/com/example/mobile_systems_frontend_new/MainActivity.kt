@@ -26,27 +26,40 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<TextView>(R.id.button)
         button.setOnClickListener {
             val macAddress = findViewById<TextView>(R.id.macAdressText).text.toString()
-            val strengthOne = findViewById<TextView>(R.id.strengthOneText).text.toString().toInt()
-            val strengthTwo = findViewById<TextView>(R.id.strengthTwoText).text.toString().toInt()
-            val strengthThree = findViewById<TextView>(R.id.strengthThreeText).text.toString().toInt()
-            val postUserData = PostUserData(users = arrayOf(
-                Users(macAddress, arrayOf(
-                    Strengths("wiliboxas1", strengthOne),
-                    Strengths("wiliboxas2", strengthTwo),
-                    Strengths("wiliboxas3", strengthThree)
+            val strengthOne = findViewById<TextView>(R.id.strengthOneText).text.toString()
+            val strengthTwo = findViewById<TextView>(R.id.strengthTwoText).text.toString()
+            val strengthThree = findViewById<TextView>(R.id.strengthThreeText).text.toString()
+            try {
+                val postUserData = PostUserData(users = arrayOf(
+                    Users(macAddress, arrayOf(
+                        Strengths("wiliboxas1", strengthOne.toInt()),
+                        Strengths("wiliboxas2", strengthTwo.toInt()),
+                        Strengths("wiliboxas3", strengthThree.toInt())
                     )
-                )))
-            viewModel.calculateLocation(postUserData)
-            viewModel.calculationResponse.observe(this, Observer{ response ->
-                Log.d("Response", response.toString())
-                var helloTextView: TextView = findViewById(R.id.text_id)
-                var finalMessage = ""
-                for(item in response.responses) {
-                    finalMessage += item + "\n"
-                }
-                helloTextView.setText(finalMessage)
-            })
+                    )))
+                viewModel.calculateLocation(postUserData)
+                viewModel.calculationResponse.observe(this, Observer{ response ->
+                    var helloTextView: TextView = findViewById(R.id.text_id)
+                    var finalMessage = ""
+                    for(item in response.responses) {
+                        finalMessage += item + "\n"
+                    }
+                    helloTextView.setText(finalMessage)
+                })
+            } catch(e: Exception) {
+                val postUserData = PostUserData()
+                viewModel.calculateLocation(postUserData)
+                viewModel.calculationResponse.observe(this, Observer{ response ->
+                    var helloTextView: TextView = findViewById(R.id.text_id)
+                    var finalMessage = ""
+                    for(item in response.responses) {
+                        finalMessage += item + "\n"
+                    }
+                    helloTextView.setText(finalMessage)
+                })
+            }
         }
+        // PIRMASIS REQUEST
         /*
         viewModel.getPost()
         viewModel.myResponse.observe(this, Observer{ response ->
