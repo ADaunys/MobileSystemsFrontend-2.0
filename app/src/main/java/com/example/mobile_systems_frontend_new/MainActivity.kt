@@ -8,6 +8,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobile_systems_frontend_new.repository.Repository
 
+import androidx.annotation.NonNull;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel:MainViewModel
