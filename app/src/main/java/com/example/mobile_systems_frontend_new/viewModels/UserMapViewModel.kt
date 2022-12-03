@@ -1,5 +1,6 @@
 package com.example.mobile_systems_frontend_new.viewModels
 
+import android.provider.ContactsContract.Data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.mobile_systems_frontend_new.model.UserMap
@@ -9,7 +10,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class WordViewModel(private val repository: DataRepository) : ViewModel() {
+class UserMapViewModel(private val repository: DataRepository) : ViewModel() {
 
     // Using LiveData and caching what allWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
@@ -20,16 +21,16 @@ class WordViewModel(private val repository: DataRepository) : ViewModel() {
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
      */
-    fun insert(word: Word) = viewModelScope.launch {
-        repository.insert(word)
+    fun insert(userMap: UserMap) = viewModelScope.launch {
+        repository.insert(userMap)
     }
 }
 
-class WordViewModelFactory(private val repository: WordRepository) : ViewModelProvider.Factory {
+class WordViewModelFactory(private val repository: DataRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(UserMapViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return WordViewModel(repository) as T
+            return UserMapViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

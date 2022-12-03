@@ -13,6 +13,9 @@ interface UserMapDao {
     @Update
     suspend fun updateWithMap(userMap: UserMap)
 
+    @Query("DELETE FROM userMap_table")
+    suspend fun delete()
+
     @Query("SELECT * FROM userMap_table")
     fun getUserMap(): Flow<UserMap>
 
