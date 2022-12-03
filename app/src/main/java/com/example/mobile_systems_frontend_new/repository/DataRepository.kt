@@ -2,6 +2,8 @@ package com.example.mobile_systems_frontend_new.repository
 
 import androidx.annotation.WorkerThread
 import com.example.mobile_systems_frontend_new.Dao.UserMapDao
+import com.example.mobile_systems_frontend_new.api.RetrofitInstance
+import com.example.mobile_systems_frontend_new.model.Map
 import com.example.mobile_systems_frontend_new.model.UserMap
 import kotlinx.coroutines.flow.Flow
 
@@ -21,5 +23,9 @@ class DataRepository(private val userMapDao: UserMapDao) {
     @WorkerThread
     suspend fun insert(userMap: UserMap) {
         userMapDao.insertUser(userMap)
+    }
+
+    suspend fun getPost(): Map {
+        return RetrofitInstance.api.getPost()
     }
 }

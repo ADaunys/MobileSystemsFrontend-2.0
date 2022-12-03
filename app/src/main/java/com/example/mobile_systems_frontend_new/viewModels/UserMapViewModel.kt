@@ -1,13 +1,11 @@
 package com.example.mobile_systems_frontend_new.viewModels
 
 import android.provider.ContactsContract.Data
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.mobile_systems_frontend_new.model.CalculationResponse
 import com.example.mobile_systems_frontend_new.model.UserMap
 import com.example.mobile_systems_frontend_new.repository.DataRepository
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import com.example.mobile_systems_frontend_new.model.Map
 import kotlinx.coroutines.launch
 
 class UserMapViewModel(private val repository: DataRepository) : ViewModel() {
@@ -24,9 +22,17 @@ class UserMapViewModel(private val repository: DataRepository) : ViewModel() {
     fun insert(userMap: UserMap) = viewModelScope.launch {
         repository.insert(userMap)
     }
+
+    val myResponse: MutableLiveData<Map> = MutableLiveData()
+    fun getPost() {
+        viewModelScope.launch {
+            val response = repository.getPost()
+            myResponse.value = response
+        }
+    }
 }
 
-class WordViewModelFactory(private val repository: DataRepository) : ViewModelProvider.Factory {
+class UserMapViewModelFactory(private val repository: DataRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserMapViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
