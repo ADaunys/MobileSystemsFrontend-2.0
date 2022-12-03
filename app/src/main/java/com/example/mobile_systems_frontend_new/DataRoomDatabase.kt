@@ -73,8 +73,8 @@ public abstract class DataRoomDatabase : RoomDatabase() {
             val viewModelFactory = MainViewModelFactory(repository)
             userMapViewModel = ViewModelProvider(this, viewModelFactory).get(UserMapViewModel::class.java)
 
-            viewModel.getPost()
-            viewModel.myResponse.observe(this, Observer{ response ->
+            userMapViewModel.getPost()
+            userMapViewModel.myResponse.observe(this, Observer{ response ->
                 val mapText: TextView = findViewById(R.id.mapTextView)
                 var map = response.map
                 Log.d("Response", map)
@@ -83,8 +83,6 @@ public abstract class DataRoomDatabase : RoomDatabase() {
                 mapText.text = map
                 mapText.movementMethod = ScrollingMovementMethod()
             })
-
-            // Call a request from the API to get the data and insert it into the database here.
             
         }
     }
