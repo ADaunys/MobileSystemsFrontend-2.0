@@ -12,17 +12,35 @@ import com.example.mobile_systems_frontend_new.model.Users
 import com.example.mobile_systems_frontend_new.repository.Repository
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ViewFlipper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import com.example.mobile_systems_frontend_new.model.Signal
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel:MainViewModel
+    lateinit var RV: RecyclerView
+    lateinit var List: ArrayList<Signal>
+    lateinit var Adapter: RecyclerAdapter
+    private var layoutManager: RecyclerView.LayoutManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        RV = findViewById(R.id.recyclerView)
+        List = ArrayList()
+
+        layoutManager = LinearLayoutManager(this)
+        RV.layoutManager = layoutManager
+        Adapter = RecyclerAdapter(items = List)
+        RV.adapter = Adapter
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
@@ -33,8 +51,8 @@ class MainActivity : AppCompatActivity() {
             val mapText: TextView = findViewById(R.id.mapTextView)
             var map = response.map
             Log.d("Response", map)
-            map = map.replace("1", "■")
-            map = map.replace("0", "□")
+            map = map.replace("0", "-")
+            map = map.replace("1", "0")
             mapText.text = map
             mapText.movementMethod = ScrollingMovementMethod()
         })
@@ -47,6 +65,16 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+
+        viewModel.getSignals()
+        viewModel.signals.observe(this, Observer{ response ->
+            Log.d("si", response.toString())
+
+            List.clear()
+            List.addAll(response.signals)
+            Log.d("s", List.size.toString())
+            Adapter.notifyDataSetChanged()
         })
     }
 
@@ -84,5 +112,34 @@ class MainActivity : AppCompatActivity() {
                 helloTextView.text = finalMessage
             })
         }
+    }
+
+    private fun setUserData() {
+        var mac = ""
+        val thread = Thread {
+            // this waits for the user data from the database and sets the text fields
+            val db =
+                Room.databaseBuilder(
+                    applicationContext,
+                    AppDatabase::class.java,
+                    "mobile-app-database-0.1"
+                )
+                    .build()
+            val userDataDao = db.userDataDao()
+            var userData = userDataDao.getAll()
+            if (userData.isEmpty()) {
+                val newData = UserData(1, "", "")
+                userDataDao.insertAll(newData)
+                userData = userDataDao.getAll()
+            }
+            db.close()
+            mac = userData[0].mac.toString()
+        }
+        thread.start()
+        // wait for thread to finish
+        thread.join()
+
+        val macText: TextView = findViewById(R.id.macAdressText)
+        macText.text = mac
     }
 }
