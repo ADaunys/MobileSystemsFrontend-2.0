@@ -13,19 +13,18 @@
 
         <TextView
             android:id="@+id/mapTextView"
-            android:layout_width="250dp"
-            android:layout_height="628dp"
-            android:background="#000000"
-            android:gravity="center"
-            android:lineSpacingExtra="0dp"
-            android:lineSpacingMultiplier="0.6"
-            android:scrollbars="vertical"
-            android:textSize="14sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="130dp"
+            android:layout_marginEnd="130dp"
+            android:lineSpacingExtra="0sp"
+            android:lineSpacingMultiplier="0.55"
+            android:text="TextView"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
-
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -1,9 +1,7 @@
 package com.example.mobile_systems_frontend_new.api
 
-import com.example.mobile_systems_frontend_new.model.CalculationResponse
-import com.example.mobile_systems_frontend_new.model.Post
+import com.example.mobile_systems_frontend_new.model.*
 import com.example.mobile_systems_frontend_new.model.Map
-import com.example.mobile_systems_frontend_new.model.PostUserData
 import okhttp3.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,4 +16,7 @@ interface SimpleApi {
     suspend fun calculateLocation(
         @Body postUserData: PostUserData
     ): CalculationResponse
+
+    @GET("/signals")
+    suspend fun getSignals(): Signals
 }

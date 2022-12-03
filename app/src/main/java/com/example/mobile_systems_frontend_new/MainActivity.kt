@@ -11,8 +11,8 @@ import com.example.mobile_systems_frontend_new.model.Strengths
 import com.example.mobile_systems_frontend_new.model.Users
 import com.example.mobile_systems_frontend_new.repository.Repository
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.widget.ViewFlipper
-import com.example.mobile_systems_frontend_new.viewModels.UserMapViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
@@ -28,18 +28,26 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
+        viewModel.getPost()
+        viewModel.myResponse.observe(this, Observer{ response ->
+            val mapText: TextView = findViewById(R.id.mapTextView)
+            var map = response.map
+            Log.d("Response", map)
+            map = map.replace("1", "■")
+            map = map.replace("0", "□")
+            mapText.text = map
+            mapText.movementMethod = ScrollingMovementMethod()
+        })
+
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val viewFlipper: ViewFlipper = findViewById(R.id.vf)
                 viewFlipper.displayedChild = tab.position
             }
-
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-
-
     }
 
     fun getCoords(view: View){
@@ -77,26 +85,4 @@ class MainActivity : AppCompatActivity() {
             })
         }
     }
-
-    fun gotoMap(view: View){
-        val repository = Repository()
-        val viewModelFactory = MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-
-        viewModel.getPost()
-        viewModel.myResponse.observe(this, Observer{ response ->
-            val mapText: TextView = findViewById(R.id.mapTextView)
-            var map = response.map
-            map = map.replace("1", "■")
-            map = map.replace("0", "□")
-            mapText.text = map
-            mapText.movementMethod = ScrollingMovementMethod()
-        })
-    }
-
-
-    //CIA PRASIDEDA ROOM
-//    private val userMapViewModel: UserMapViewModel by viewModels {
-//        WordViewModelFactory((application as WordsApplication).repository)
-//    }
 }
