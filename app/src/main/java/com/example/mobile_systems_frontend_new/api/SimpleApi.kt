@@ -18,5 +18,5 @@ interface SimpleApi {
     ): CalculationResponse
 
     @GET("/signals")
-    suspend fun getSignals(): Signals
+    suspend fun getSignals(): Messages
 }

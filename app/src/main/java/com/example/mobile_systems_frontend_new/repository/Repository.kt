@@ -12,7 +12,7 @@ class Repository {
     suspend fun calculateLocation(postUserData: PostUserData): CalculationResponse {
         return RetrofitInstance.api.calculateLocation(postUserData)
     }
-    suspend fun getSignals(): Signals {
+    suspend fun getSignals(): Messages {
         return RetrofitInstance.api.getSignals()
     }
 }

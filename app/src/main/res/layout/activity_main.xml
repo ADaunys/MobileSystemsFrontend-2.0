@@ -45,15 +45,19 @@
         <ViewFlipper
             android:id="@+id/vf"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <include
                 android:id="@+id/main_layout"
                 layout="@layout/main_layout" />
 
-            <include android:id="@+id/signals_layout" layout="@layout/signal_strength_view" />
+            <include
+                android:id="@+id/signals_layout"
+                layout="@layout/signal_strength_view" />
 
-            <include android:id="@+id/map_layout" layout="@layout/map_view" />
+            <include
+                android:id="@+id/map_layout"
+                layout="@layout/map_view" />
         </ViewFlipper>
     </androidx.core.widget.NestedScrollView>
 
