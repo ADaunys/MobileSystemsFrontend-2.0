@@ -9,8 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mobile_systems_frontend_new.repository.Repository
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.ViewFlipper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         RV.layoutManager = layoutManager
         Adapter = RecyclerAdapter(items = List)
         RV.adapter = Adapter
+
+        getUserData()
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
@@ -90,9 +90,7 @@ class MainActivity : AppCompatActivity() {
                 ))))
 
             viewModel.calculateLocation(postUserData)
-
-
-
+            insertUserData(macAddress, strengthOne.toInt(), strengthTwo.toInt(), strengthThree.toInt())
             viewModel.calculationResponse.observe(this, Observer{ response ->
                 var helloTextView: TextView = findViewById(R.id.text_id)
                 var finalMessage = ""
@@ -113,16 +111,13 @@ class MainActivity : AppCompatActivity() {
                 helloTextView.text = finalMessage
             })
         }
-
-
-    }
-
-    private fun insertUserData(mac: String){
-        val thread = 0;
     }
 
     private fun getUserData() {
         var mac = ""
+        var strengthOne = ""
+        var strengthTwo = ""
+        var strengthThree = ""
         val thread = Thread {
             // this waits for the user data from the database and sets the text fields
             val db =
@@ -132,21 +127,54 @@ class MainActivity : AppCompatActivity() {
                     "mobile-app-database-0.1"
                 )
                     .build()
-            val userDataDao = db.userDataDao()
-            var userData = userDataDao.getUserMap()
+            val dao = db.dao()
+            var userData = dao.getInputData()
             if (userData.isEmpty()) {
-                val newData = UserMap(1, "", "")
-                userDataDao.insert(newData)
-                userData = userDataDao.getUserMap()
+                val newData = InputData(1, "", 0, 0, 0)
+                dao.insertInputData(newData)
+                userData = dao.getInputData()
             }
             db.close()
             mac = userData[0].user.toString()
+            strengthOne = userData[0].str1.toString()
+            strengthTwo = userData[0].str2.toString()
+            strengthThree = userData[0].str3.toString()
         }
         thread.start()
         // wait for thread to finish
         thread.join()
 
         val macText: TextView = findViewById(R.id.macAdressText)
+        val strengthOneText: TextView = findViewById(R.id.strengthOneText)
+        val strengthTwoText: TextView = findViewById(R.id.strengthTwoText)
+        val strengthThreeText: TextView = findViewById(R.id.strengthThreeText)
         macText.text = mac
+        strengthOneText.text = strengthOne
+        strengthTwoText.text = strengthTwo
+        strengthThreeText.text = strengthThree
+    }
+
+    private fun insertUserData(mac: String, str1: Int, str2: Int, str3: Int) {
+        val thread = Thread {
+            // this waits for the user data from the database and sets the text fields
+            val db =
+                Room.databaseBuilder(
+                    applicationContext,
+                    DataRoomDatabase::class.java,
+                    "mobile-app-database-0.1"
+                ).build()
+            val userDataDao = db.dao()
+            var userData = userDataDao.getInputData()
+            val newData = InputData(1, mac, str1, str2, str3)
+            if(userData.isEmpty()){
+                userDataDao.insertInputData(newData)
+            } else {
+                userDataDao.updateInputData(newData)
+            }
+            db.close()
+        }
+        thread.start()
+        // wait for thread to finish
+        thread.join()
     }
 }
