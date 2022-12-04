@@ -31,5 +31,6 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             val response = repository.getSignals()
             signals.value = response
         }
+
     }
 }

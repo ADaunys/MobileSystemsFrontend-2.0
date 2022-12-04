@@ -6,9 +6,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.mobile_systems_frontend_new.model.PostUserData
-import com.example.mobile_systems_frontend_new.model.Strengths
-import com.example.mobile_systems_frontend_new.model.Users
 import com.example.mobile_systems_frontend_new.repository.Repository
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
@@ -18,7 +15,8 @@ import android.widget.ViewFlipper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.example.mobile_systems_frontend_new.model.Signal
+import com.example.mobile_systems_frontend_new.database.DataRoomDatabase
+import com.example.mobile_systems_frontend_new.model.*
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
@@ -92,6 +90,9 @@ class MainActivity : AppCompatActivity() {
                 ))))
 
             viewModel.calculateLocation(postUserData)
+
+
+
             viewModel.calculationResponse.observe(this, Observer{ response ->
                 var helloTextView: TextView = findViewById(R.id.text_id)
                 var finalMessage = ""
@@ -112,28 +113,34 @@ class MainActivity : AppCompatActivity() {
                 helloTextView.text = finalMessage
             })
         }
+
+
     }
 
-    private fun setUserData() {
+    private fun insertUserData(mac: String){
+        val thread = 0;
+    }
+
+    private fun getUserData() {
         var mac = ""
         val thread = Thread {
             // this waits for the user data from the database and sets the text fields
             val db =
                 Room.databaseBuilder(
                     applicationContext,
-                    AppDatabase::class.java,
+                    DataRoomDatabase::class.java,
                     "mobile-app-database-0.1"
                 )
                     .build()
             val userDataDao = db.userDataDao()
-            var userData = userDataDao.getAll()
+            var userData = userDataDao.getUserMap()
             if (userData.isEmpty()) {
-                val newData = UserData(1, "", "")
-                userDataDao.insertAll(newData)
-                userData = userDataDao.getAll()
+                val newData = UserMap(1, "", "")
+                userDataDao.insert(newData)
+                userData = userDataDao.getUserMap()
             }
             db.close()
-            mac = userData[0].mac.toString()
+            mac = userData[0].user.toString()
         }
         thread.start()
         // wait for thread to finish

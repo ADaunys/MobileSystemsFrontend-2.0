@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.Flow
 interface UserMapDao {
     //Insert user string
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(userMap: UserMap)
+    fun insert(userMap: UserMap)
 
     @Update
-    suspend fun update(userMap: UserMap)
+    fun update(userMap: UserMap)
 
     @Query("DELETE FROM userMap_table")
-    suspend fun delete()
+    fun delete()
 
     @Query("SELECT * FROM userMap_table")
-    fun getUserMap(): Flow<UserMap>
+    fun getUserMap(): List<UserMap>
 
 
 }
