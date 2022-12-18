@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
             val mapText: TextView = findViewById(R.id.mapTextView)
             var map = response.map
             Log.d("Response", map)
-            map = map.replace("0", "-")
-            map = map.replace("1", "0")
+            map = map.replace("0", "□")
+            map = map.replace("1", "■")
             mapText.text = map
             mapText.movementMethod = ScrollingMovementMethod()
         })
